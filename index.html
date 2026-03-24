@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildQuest — A BuildOps Retro Gaming Experience</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BuildOps">
+<meta property="og:title" content="BuildQuest — A BuildOps Retro Gaming Experience">
+<meta property="og:description" content="A retro 8-bit browser game concept where contractors compete on profit margins, fix rates, and business metrics. Power-ups map to real BuildOps features. Press Start.">
+<meta property="og:image" content="https://buildquest.netlify.app/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BuildQuest — A BuildOps Retro Gaming Experience">
+<meta name="twitter:description" content="A retro 8-bit browser game concept where contractors compete on profit margins, fix rates, and business metrics. Power-ups map to real BuildOps features.">
+<meta name="twitter:image" content="https://buildquest.netlify.app/preview.png">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="BuildQuest: A retro gaming concept by BuildOps. Contractors compete on business metrics in an 8-bit browser game. Marketing concept proposal 2026.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070b14;font-family:'Inter',system-ui,sans-serif;color:#fff;height:100vh;height:100dvh;overflow:hidden;position:fixed;width:100%;top:0;left:0}
+.deck{width:100vw;height:100vh;height:100dvh;position:fixed;top:0;left:0;background:#070b14;overflow:hidden}
+.deck::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,rgba(74,222,128,.04) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(59,130,246,.03) 0%,transparent 60%);animation:ambientShift 20s ease-in-out infinite alternate;pointer-events:none;z-index:0}
+@keyframes ambientShift{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-3%,2%) scale(1.05)}100%{transform:translate(2%,-1%) scale(1)}}
+.grid-overlay{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+.noise{position:fixed;inset:0;opacity:.03;pointer-events:none;z-index:0}
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;background:#4ade80;border-radius:50%;opacity:0;animation:float linear infinite}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+.slide{width:100%;height:100vh;height:100dvh;padding:5vh 6vw 10vh;flex-direction:column;justify-content:center;position:absolute;top:0;left:0;z-index:1;overflow:hidden;display:flex;visibility:hidden;opacity:0;pointer-events:none}
+.slide.active{visibility:visible;opacity:1;pointer-events:auto;z-index:2}
+.slide.scrollable{overflow-y:auto;-webkit-overflow-scrolling:touch;justify-content:flex-start;padding-top:5vh;padding-bottom:8vh}
+.slide.active .anim-fade{animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both}
+.slide.active .anim-fade:nth-child(1){animation-delay:.05s}
+.slide.active .anim-fade:nth-child(2){animation-delay:.12s}
+.slide.active .anim-fade:nth-child(3){animation-delay:.19s}
+.slide.active .anim-fade:nth-child(4){animation-delay:.26s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .stagger-children > *{animation:fadeUp .5s cubic-bezier(.16,1,.3,1) both}
+.slide.active .stagger-children > *:nth-child(1){animation-delay:.08s}
+.slide.active .stagger-children > *:nth-child(2){animation-delay:.14s}
+.slide.active .stagger-children > *:nth-child(3){animation-delay:.20s}
+.slide.active .stagger-children > *:nth-child(4){animation-delay:.26s}
+.slide.active .stagger-children > *:nth-child(5){animation-delay:.32s}
+.slide.active .stagger-children > *:nth-child(6){animation-delay:.38s}
+.slide.active .stagger-children > *:nth-child(7){animation-delay:.44s}
+.slide.active .stagger-children > *:nth-child(8){animation-delay:.50s}
+.tag{color:#4ade80;font-family:'JetBrains Mono',monospace;font-size:clamp(9px,1.1vw,12px);letter-spacing:3px;margin-bottom:1.5vh;opacity:.5;text-transform:uppercase}
+h1{font-size:clamp(32px,5.5vw,68px);font-weight:900;font-family:'JetBrains Mono',monospace;margin-bottom:.5vh;background:linear-gradient(135deg,#fff 0%,#4ade80 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+h2{font-size:clamp(22px,3vw,40px);font-weight:800;margin-bottom:2.5vh;letter-spacing:-.02em;line-height:1.2}
+.subtitle{color:#4ade80;font-family:'JetBrains Mono',monospace;font-size:clamp(13px,1.6vw,18px);margin-top:1vh;margin-bottom:3vh;opacity:.8}
+.card{background:rgba(255,255,255,.03);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:clamp(12px,1.8vw,22px);transition:all .3s cubic-bezier(.16,1,.3,1)}
+.card:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);transform:translateY(-2px)}
+.card-green{border-color:rgba(74,222,128,.15)}.card-green:hover{border-color:rgba(74,222,128,.3);box-shadow:0 4px 30px rgba(74,222,128,.05)}
+.card-yellow{border-color:rgba(250,204,21,.15)}.card-yellow:hover{border-color:rgba(250,204,21,.3)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(10px,1.5vw,18px)}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(10px,1.5vw,16px)}
+.flex-row{display:flex;gap:clamp(12px,2vw,24px)}.flex-row>*{flex:1}
+.item{display:flex;align-items:flex-start;gap:clamp(10px,1.4vw,18px);margin-bottom:clamp(12px,2vh,24px)}
+.item-icon{font-size:clamp(22px,2.8vw,34px);flex-shrink:0}
+.item-title{color:#fff;font-weight:700;font-size:clamp(12px,1.3vw,17px);letter-spacing:-.01em}
+.item-desc{color:rgba(255,255,255,.5);font-size:clamp(11px,1.1vw,14px);line-height:1.6;margin-top:3px}
+.sm{font-size:clamp(11px,1.1vw,14px);color:rgba(255,255,255,.5);line-height:1.6}
+.xs{font-size:clamp(9px,1vw,12px)}
+.mono{font-family:'JetBrains Mono',monospace}
+.green{color:#4ade80}.yellow{color:#facc15}.purple{color:#c084fc}.blue{color:#60a5fa}.red{color:#f87171}.cyan{color:#22d3ee}.orange{color:#fb923c}
+.badge{display:inline-block;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:4px 12px;font-family:'JetBrains Mono',monospace;font-size:clamp(9px,1vw,13px);color:#d1d5db}
+.boss-badge{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.2);color:#fca5a5;border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:clamp(9px,.9vw,12px);display:inline-block;margin:3px;transition:all .2s}
+.boss-badge:hover{background:rgba(220,38,38,.2);transform:scale(1.03)}
+.bar-wrap{width:100%;background:rgba(255,255,255,.06);border-radius:99px;height:6px;margin-top:5px;overflow:hidden}
+.bar-fill{height:6px;border-radius:99px;transition:width 1s cubic-bezier(.16,1,.3,1);width:0}
+.slide.active .bar-fill.w25{width:25%}.slide.active .bar-fill.w50{width:50%}.slide.active .bar-fill.w75{width:75%}.slide.active .bar-fill.w100{width:100%}
+.step-num{background:linear-gradient(135deg,#16a34a,#4ade80);color:#000;font-size:clamp(10px,1vw,13px);font-weight:700;width:clamp(22px,2.2vw,28px);height:clamp(22px,2.2vw,28px);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(74,222,128,.2)}
+.bullet{color:#4ade80;margin-right:6px}
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:2.5vw;z-index:100;padding:2vh 0;background:linear-gradient(transparent,rgba(7,11,20,.95) 40%)}
+.nav-btn{background:none;border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace;font-size:clamp(10px,1.1vw,13px);cursor:pointer;padding:8px 18px;transition:all .25s;border-radius:8px}
+.nav-btn:hover:not(:disabled){color:#fff;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
+.nav-btn:disabled{opacity:.15;cursor:default}
+.dots{display:flex;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.12);border:none;cursor:pointer;transition:all .3s;padding:0}
+.dot:hover{background:rgba(255,255,255,.25)}.dot.active{background:#4ade80;box-shadow:0 0 10px rgba(74,222,128,.4)}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center}
+.pixel-dots{display:flex;gap:10px;margin-top:2vh}
+.pixel-dots span{width:12px;height:12px;background:#22c55e;border-radius:3px;opacity:.4;animation:dotPulse 2s ease-in-out infinite}
+.pixel-dots span:nth-child(2){animation-delay:.3s}.pixel-dots span:nth-child(3){animation-delay:.6s}.pixel-dots span:nth-child(4){animation-delay:.9s}
+@keyframes dotPulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.7;transform:scale(1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.glow-text{text-shadow:0 0 30px rgba(74,222,128,.3),0 0 60px rgba(74,222,128,.1)}
+.progress-flow{display:flex;align-items:center;justify-content:center;gap:clamp(6px,1vw,12px);flex-wrap:wrap;margin-top:1.5vh}
+.progress-flow .arrow{color:#4ade80;font-size:clamp(10px,1.2vw,16px);opacity:.5}
+.metric-card{text-align:center;padding:clamp(12px,1.8vw,22px)}
+.metric-card .icon{font-size:clamp(20px,2.4vw,30px);margin-bottom:.8vh}
+.metric-card .name{font-weight:700;font-size:clamp(11px,1.1vw,14px)}
+.metric-card .role{color:rgba(255,255,255,.35);font-size:clamp(9px,.9vw,11px);margin-top:4px}
+.score-flow{display:flex;align-items:center;gap:clamp(6px,1vw,12px);font-family:'JetBrains Mono',monospace;font-size:clamp(9px,1vw,13px);color:rgba(255,255,255,.5);flex-wrap:wrap;margin-top:1.5vh}
+.tier{display:flex;align-items:center;justify-content:space-between;font-size:clamp(11px,1.1vw,14px);margin-bottom:.4vh}
+.tier-name{color:#fff;font-weight:500}.tier-pts{color:rgba(255,255,255,.3);font-family:'JetBrains Mono',monospace;font-size:clamp(9px,.9vw,11px)}
+.slide-number{position:absolute;top:3vh;right:4vw;font-family:'JetBrains Mono',monospace;font-size:clamp(9px,.9vw,11px);color:rgba(255,255,255,.15);z-index:2}
+.lb{display:flex;flex-direction:column;gap:clamp(3px,.5vh,6px)}
+.lb-row{display:flex;align-items:center;gap:clamp(4px,.6vw,8px);padding:clamp(5px,.7vh,8px) clamp(6px,.8vw,10px);border-radius:8px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.03);transition:all .25s;font-size:clamp(10px,1vw,13px)}
+.lb-row:hover{background:rgba(255,255,255,.05);transform:translateX(3px)}
+.lb-gold{border-color:rgba(250,204,21,.2);background:rgba(250,204,21,.05)}
+.lb-silver{border-color:rgba(192,192,192,.15);background:rgba(192,192,192,.03)}
+.lb-bronze{border-color:rgba(205,127,50,.15);background:rgba(205,127,50,.03)}
+.lb-rank{font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.3);width:clamp(14px,1.4vw,20px);text-align:right;flex-shrink:0}
+.lb-gold .lb-rank{color:#facc15}.lb-silver .lb-rank{color:#d1d5db}.lb-bronze .lb-rank{color:#cd7f32}
+.lb-crown,.lb-medal{width:clamp(16px,1.6vw,22px);text-align:center;flex-shrink:0;font-size:clamp(10px,1.1vw,14px)}
+.lb-name{flex:1;color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-co{color:rgba(255,255,255,.3);font-weight:400;font-size:clamp(8px,.8vw,11px)}
+.lb-score{font-family:'JetBrains Mono',monospace;color:#4ade80;font-weight:700;flex-shrink:0}
+.lb-tier{font-family:'JetBrains Mono',monospace;font-size:clamp(7px,.7vw,9px);color:rgba(255,255,255,.25);letter-spacing:1px;flex-shrink:0;width:clamp(40px,4vw,55px);text-align:right}
+.lb-char{flex-shrink:0;font-size:clamp(10px,1.1vw,14px)}
+@media(max-width:768px){.grid2,.grid3{grid-template-columns:1fr}.flex-row{flex-direction:column}.slide{padding:3vh 5vw 12vh}.slide-number{top:2vh;right:3vw}h2{font-size:clamp(20px,6vw,30px);margin-bottom:2vh}.progress-flow{flex-direction:column;gap:6px}.progress-flow .arrow{transform:rotate(90deg)}.score-flow{flex-wrap:wrap;gap:6px}.nav{padding:1.5vh 0;gap:4vw}.nav-btn{padding:6px 12px;font-size:11px}}
+@media(max-width:400px){.slide{padding:2.5vh 4vw 13vh}h1{font-size:28px}h2{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="deck">
+<div class="grid-overlay"></div>
+<div class="noise"></div>
+<div class="particles" id="particles"></div>
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide active">
+  <div class="center" style="flex:1;justify-content:center">
+    <div class="tag anim-fade">▶ PRESS START</div>
+    <h1 class="anim-fade glow-text">BUILD QUEST</h1>
+    <div class="subtitle anim-fade">A BuildOps Retro Gaming Experience</div>
+    <div class="pixel-dots anim-fade"><span></span><span></span><span></span><span></span></div>
+    <div class="anim-fade" style="color:rgba(255,255,255,.25);font-family:'JetBrains Mono',monospace;font-size:clamp(9px,1vw,12px);margin-top:5vh">Marketing Concept Proposal — 2026</div>
+  </div>
+</div>
+
+<!-- SLIDE 2: OPPORTUNITY -->
+<div class="slide">
+  <div class="slide-number">01 / 10</div>
+  <div class="tag anim-fade">01 / THE OPPORTUNITY</div>
+  <h2 class="anim-fade">Why a Retro Game?</h2>
+  <div class="stagger-children">
+    <div class="item"><div class="item-icon">🎮</div><div><div class="item-title">Nostalgia Meets Brand</div><div class="item-desc">Late 80s/90s game aesthetics resonate with our contractor audience's generation. A pixel-art browser game is unexpected, memorable, and shareable.</div></div></div>
+    <div class="item"><div class="item-icon">📈</div><div><div class="item-title">Product Education Through Play</div><div class="item-desc">Every power-up maps to a real BuildOps feature. Players learn what OpsAI and our platform do — without sitting through a demo.</div></div></div>
+    <div class="item"><div class="item-icon">🏆</div><div><div class="item-title">Viral Leaderboard Competition</div><div class="item-desc">Contractors are competitive by nature. Public leaderboards and shareable scores drive organic reach across our customer base and beyond.</div></div></div>
+  </div>
+</div>
+
+<!-- SLIDE 3: CONCEPT -->
+<div class="slide">
+  <div class="slide-number">02 / 10</div>
+  <div class="tag anim-fade">02 / THE CONCEPT</div>
+  <h2 class="anim-fade">Gameplay Overview</h2>
+  <div class="grid2 stagger-children" style="margin-bottom:clamp(10px,1.8vh,18px)">
+    <div class="card"><div class="green mono xs" style="margin-bottom:5px">GENRE</div><div class="item-title">Top-Down Adventure</div><div class="sm" style="margin-top:5px">Zelda-style exploration through commercial building environments</div></div>
+    <div class="card"><div class="green mono xs" style="margin-bottom:5px">SETTING</div><div class="item-title">Pixel Commercial World</div><div class="sm" style="margin-top:5px">Rooftops, mechanical rooms, warehouses — the trades in 8-bit</div></div>
+    <div class="card"><div class="green mono xs" style="margin-bottom:5px">PLAYER</div><div class="item-title">A Contractor on the Rise</div><div class="sm" style="margin-top:5px">Navigate jobs, manage crews, defeat inefficiency, grow your business</div></div>
+    <div class="card"><div class="green mono xs" style="margin-bottom:5px">OBJECTIVE</div><div class="item-title">Maximize Business Metrics</div><div class="sm" style="margin-top:5px">Score = Profit Margin %, Fix Rate, Revenue Per Tech, Customer Sat & more</div></div>
+  </div>
+  <div class="card card-green anim-fade" style="text-align:center;animation-delay:.35s">
+    <div class="sm">Players progress through increasingly complex jobs:</div>
+    <div class="progress-flow"><span class="badge">Residential</span><span class="arrow">→</span><span class="badge">Light Commercial</span><span class="arrow">→</span><span class="badge">Large Commercial</span><span class="arrow">→</span><span class="badge">Multi-Site Enterprise</span></div>
+  </div>
+</div>
+
+<!-- SLIDE 4: CHARACTERS -->
+<div class="slide">
+  <div class="slide-number">03 / 10</div>
+  <div class="tag anim-fade">03 / CHARACTER CONCEPTS</div>
+  <h2 class="anim-fade">Meet the Crew</h2>
+  <div class="grid2 stagger-children" style="margin-bottom:clamp(10px,1.8vh,16px)">
+    <div class="card" style="display:flex;align-items:center;gap:clamp(14px,2vw,24px)">
+      <svg width="64" height="77" viewBox="0 0 20 24" shape-rendering="crispEdges" style="flex-shrink:0;image-rendering:pixelated"><rect x="7" y="0" width="6" height="1" fill="#f97316"/><rect x="6" y="1" width="8" height="1" fill="#f97316"/><rect x="5" y="2" width="10" height="1" fill="#fb923c"/><rect x="4" y="3" width="12" height="1" fill="#fdba74"/><rect x="6" y="4" width="8" height="4" fill="#fed7aa"/><rect x="7" y="5" width="2" height="1" fill="#1e293b"/><rect x="11" y="5" width="2" height="1" fill="#1e293b"/><rect x="8" y="5" width="1" height="1" fill="#fff"/><rect x="12" y="5" width="1" height="1" fill="#fff"/><rect x="8" y="7" width="4" height="1" fill="#fca5a5"/><rect x="8" y="8" width="4" height="1" fill="#fbbf24"/><rect x="5" y="9" width="10" height="1" fill="#3b82f6"/><rect x="4" y="10" width="12" height="4" fill="#2563eb"/><rect x="9" y="10" width="2" height="3" fill="#4ade80"/><rect x="5" y="11" width="3" height="2" fill="#1d4ed8"/><rect x="12" y="11" width="3" height="2" fill="#1d4ed8"/><rect x="3" y="10" width="1" height="4" fill="#fed7aa"/><rect x="16" y="10" width="1" height="4" fill="#fed7aa"/><rect x="17" y="11" width="2" height="1" fill="#9ca3af"/><rect x="18" y="10" width="1" height="3" fill="#6b7280"/><rect x="5" y="14" width="10" height="1" fill="#92400e"/><rect x="8" y="14" width="4" height="1" fill="#fbbf24"/><rect x="6" y="15" width="3" height="4" fill="#1e3a5f"/><rect x="11" y="15" width="3" height="4" fill="#1e3a5f"/><rect x="5" y="19" width="4" height="2" fill="#78350f"/><rect x="11" y="19" width="4" height="2" fill="#78350f"/></svg>
+      <div><div class="item-title orange">The HVAC Tech</div><div class="sm xs" style="margin-top:4px">Hard hat, tool belt, wrench. Starting character — balanced stats, reliable on every job type.</div><div class="mono xs" style="margin-top:6px;color:rgba(255,255,255,.3)">SPD ●●●○○ STR ●●●○○ FIX ●●●●○</div></div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:clamp(14px,2vw,24px)">
+      <svg width="64" height="77" viewBox="0 0 20 24" shape-rendering="crispEdges" style="flex-shrink:0;image-rendering:pixelated"><rect x="7" y="0" width="6" height="1" fill="#fbbf24"/><rect x="6" y="1" width="8" height="1" fill="#fbbf24"/><rect x="9" y="1" width="2" height="1" fill="#fff"/><rect x="5" y="2" width="10" height="1" fill="#fde68a"/><rect x="4" y="3" width="12" height="1" fill="#fef3c7"/><rect x="6" y="4" width="8" height="4" fill="#d4a574"/><rect x="7" y="5" width="2" height="1" fill="#1e293b"/><rect x="11" y="5" width="2" height="1" fill="#1e293b"/><rect x="8" y="5" width="1" height="1" fill="#fff"/><rect x="12" y="5" width="1" height="1" fill="#fff"/><rect x="9" y="7" width="2" height="1" fill="#fff"/><rect x="8" y="8" width="4" height="1" fill="#d4a574"/><rect x="5" y="9" width="10" height="1" fill="#22c55e"/><rect x="4" y="10" width="12" height="4" fill="#16a34a"/><rect x="9" y="10" width="2" height="2" fill="#4ade80"/><rect x="3" y="10" width="1" height="4" fill="#d4a574"/><rect x="16" y="10" width="1" height="4" fill="#d4a574"/><rect x="1" y="10" width="1" height="5" fill="#facc15"/><rect x="0" y="8" width="1" height="1" fill="#fef08a"/><rect x="1" y="7" width="1" height="1" fill="#fef08a"/><rect x="5" y="14" width="10" height="1" fill="#92400e"/><rect x="6" y="15" width="3" height="4" fill="#1e3a5f"/><rect x="11" y="15" width="3" height="4" fill="#1e3a5f"/><rect x="5" y="19" width="4" height="2" fill="#78350f"/><rect x="11" y="19" width="4" height="2" fill="#78350f"/></svg>
+      <div><div class="item-title yellow">The Electrician</div><div class="sm xs" style="margin-top:4px">Voltage tester in hand, headlamp on cap. Speed class — fast movement, powers up OpsAI faster.</div><div class="mono xs" style="margin-top:6px;color:rgba(255,255,255,.3)">SPD ●●●●○ STR ●●○○○ FIX ●●●●●</div></div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:clamp(14px,2vw,24px)">
+      <svg width="64" height="77" viewBox="0 0 20 24" shape-rendering="crispEdges" style="flex-shrink:0;image-rendering:pixelated"><rect x="6" y="0" width="8" height="1" fill="#dc2626"/><rect x="5" y="1" width="10" height="2" fill="#dc2626"/><rect x="13" y="3" width="3" height="1" fill="#991b1b"/><rect x="6" y="3" width="7" height="1" fill="#fed7aa"/><rect x="6" y="4" width="8" height="4" fill="#fed7aa"/><rect x="7" y="5" width="2" height="1" fill="#1e293b"/><rect x="11" y="5" width="2" height="1" fill="#1e293b"/><rect x="8" y="5" width="1" height="1" fill="#fff"/><rect x="12" y="5" width="1" height="1" fill="#fff"/><rect x="7" y="7" width="6" height="1" fill="#92400e"/><rect x="8" y="8" width="4" height="1" fill="#fed7aa"/><rect x="5" y="9" width="10" height="1" fill="#7c3aed"/><rect x="4" y="10" width="12" height="5" fill="#6d28d9"/><rect x="7" y="9" width="1" height="4" fill="#5b21b6"/><rect x="12" y="9" width="1" height="4" fill="#5b21b6"/><rect x="9" y="10" width="2" height="2" fill="#4ade80"/><rect x="2" y="10" width="2" height="4" fill="#fed7aa"/><rect x="16" y="10" width="2" height="4" fill="#fed7aa"/><rect x="17" y="9" width="1" height="5" fill="#6b7280"/><rect x="18" y="9" width="2" height="2" fill="#9ca3af"/><rect x="5" y="14" width="10" height="1" fill="#92400e"/><rect x="6" y="15" width="3" height="4" fill="#44403c"/><rect x="11" y="15" width="3" height="4" fill="#44403c"/><rect x="5" y="19" width="4" height="2" fill="#78350f"/><rect x="11" y="19" width="4" height="2" fill="#78350f"/></svg>
+      <div><div class="item-title purple">The Plumber</div><div class="sm xs" style="margin-top:4px">Big arms, backwards cap, pipe wrench. Tank class — absorbs more damage from boss battles.</div><div class="mono xs" style="margin-top:6px;color:rgba(255,255,255,.3)">SPD ●●○○○ STR ●●●●● FIX ●●●○○</div></div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:clamp(14px,2vw,24px)">
+      <svg width="64" height="77" viewBox="0 0 20 24" shape-rendering="crispEdges" style="flex-shrink:0;image-rendering:pixelated"><rect x="6" y="0" width="8" height="2" fill="#1e293b"/><rect x="5" y="2" width="10" height="1" fill="#1e293b"/><rect x="6" y="3" width="8" height="5" fill="#fed7aa"/><rect x="7" y="5" width="2" height="1" fill="#1e293b"/><rect x="11" y="5" width="2" height="1" fill="#1e293b"/><rect x="8" y="5" width="1" height="1" fill="#fff"/><rect x="12" y="5" width="1" height="1" fill="#fff"/><rect x="6" y="4" width="3" height="1" fill="rgba(192,132,252,.35)"/><rect x="11" y="4" width="3" height="1" fill="rgba(192,132,252,.35)"/><rect x="9" y="4" width="2" height="1" fill="rgba(192,132,252,.25)"/><rect x="9" y="7" width="2" height="1" fill="#fca5a5"/><rect x="8" y="8" width="4" height="1" fill="#fed7aa"/><rect x="5" y="9" width="10" height="1" fill="#e5e7eb"/><rect x="4" y="10" width="12" height="4" fill="#d1d5db"/><rect x="9" y="9" width="2" height="5" fill="#22c55e"/><rect x="3" y="10" width="1" height="4" fill="#fed7aa"/><rect x="16" y="10" width="1" height="4" fill="#fed7aa"/><rect x="0" y="10" width="3" height="4" fill="#1e293b"/><rect x="1" y="11" width="1" height="2" fill="#4ade80"/><rect x="5" y="14" width="10" height="1" fill="#374151"/><rect x="6" y="15" width="3" height="4" fill="#374151"/><rect x="11" y="15" width="3" height="4" fill="#374151"/><rect x="5" y="19" width="4" height="2" fill="#1e293b"/><rect x="11" y="19" width="4" height="2" fill="#1e293b"/></svg>
+      <div><div class="item-title cyan">The Project Manager</div><div class="sm xs" style="margin-top:4px">BuildOps tablet in hand, green tie. Support class — boosts team scores and unlocks multipliers.</div><div class="mono xs" style="margin-top:6px;color:rgba(255,255,255,.3)">SPD ●●●○○ STR ●○○○○ BUFF ●●●●●</div></div>
+    </div>
+  </div>
+  <div class="grid2 stagger-children" style="margin-top:clamp(4px,.8vh,8px)">
+    <div class="card card-green" style="display:flex;align-items:center;gap:clamp(14px,2vw,24px)">
+      <svg width="64" height="77" viewBox="0 0 20 24" shape-rendering="crispEdges" style="flex-shrink:0;image-rendering:pixelated"><rect x="9" y="0" width="2" height="1" fill="#86efac"/><rect x="8" y="0" width="1" height="1" fill="#fef08a"/><rect x="11" y="0" width="1" height="1" fill="#fef08a"/><rect x="9" y="1" width="2" height="1" fill="#4ade80"/><rect x="5" y="2" width="10" height="1" fill="#16a34a"/><rect x="4" y="3" width="12" height="12" fill="#15803d"/><rect x="5" y="3" width="10" height="1" fill="#22c55e"/><rect x="6" y="4" width="8" height="8" fill="#0a1628"/><rect x="7" y="6" width="2" height="2" fill="#4ade80"/><rect x="8" y="6" width="1" height="1" fill="#86efac"/><rect x="11" y="6" width="2" height="2" fill="#4ade80"/><rect x="12" y="6" width="1" height="1" fill="#86efac"/><rect x="9" y="5" width="2" height="1" fill="#22c55e"/><rect x="7" y="9" width="1" height="1" fill="#4ade80"/><rect x="8" y="10" width="4" height="1" fill="#4ade80"/><rect x="12" y="9" width="1" height="1" fill="#4ade80"/><rect x="6" y="11" width="5" height="1" fill="#22c55e"/><rect x="2" y="6" width="2" height="3" fill="#22c55e"/><rect x="16" y="6" width="2" height="3" fill="#22c55e"/><rect x="5" y="15" width="10" height="1" fill="#16a34a"/><rect x="6" y="16" width="3" height="1" fill="#4ade80"/><rect x="11" y="16" width="3" height="1" fill="#4ade80"/><rect x="7" y="17" width="1" height="1" fill="#86efac" opacity=".5"/><rect x="12" y="17" width="1" height="1" fill="#86efac" opacity=".5"/><rect x="8" y="18" width="1" height="1" fill="#22c55e" opacity=".2"/><rect x="11" y="18" width="1" height="1" fill="#22c55e" opacity=".2"/></svg>
+      <div><div class="item-title green">OpsAI Companion ⚡</div><div class="sm xs" style="margin-top:4px">A hovering BuildOps tablet with a friendly AI face. Follows your character, activates superpowers, and supercharges margins.</div><div class="mono xs" style="margin-top:6px;color:rgba(74,222,128,.5)">★ UNLOCKS ALL POWER-UPS</div></div>
+    </div>
+    <div class="card" style="display:flex;align-items:center;gap:clamp(14px,2vw,24px)">
+      <svg width="64" height="77" viewBox="0 0 20 24" shape-rendering="crispEdges" style="flex-shrink:0;image-rendering:pixelated"><rect x="3" y="0" width="1" height="1" fill="#ef4444" opacity=".5"/><rect x="16" y="0" width="1" height="1" fill="#ef4444" opacity=".5"/><rect x="13" y="1" width="3" height="2" fill="#d6d3d1"/><rect x="14" y="1" width="2" height="1" fill="#a8a29e"/><rect x="3" y="2" width="13" height="2" fill="#f5f5f4"/><rect x="2" y="4" width="15" height="12" fill="#fafaf9"/><rect x="2" y="6" width="15" height="1" fill="#d6d3d1"/><rect x="2" y="9" width="15" height="1" fill="#d6d3d1"/><rect x="2" y="12" width="15" height="1" fill="#d6d3d1"/><rect x="7" y="4" width="1" height="12" fill="#d6d3d1"/><rect x="12" y="4" width="1" height="12" fill="#d6d3d1"/><rect x="4" y="4" width="2" height="1" fill="#dc2626"/><rect x="13" y="4" width="2" height="1" fill="#dc2626"/><rect x="4" y="7" width="2" height="2" fill="#dc2626"/><rect x="13" y="7" width="2" height="2" fill="#dc2626"/><rect x="5" y="7" width="1" height="1" fill="#7f1d1d"/><rect x="14" y="7" width="1" height="1" fill="#7f1d1d"/><rect x="4" y="13" width="2" height="1" fill="#1e293b"/><rect x="6" y="12" width="1" height="1" fill="#1e293b"/><rect x="7" y="13" width="2" height="1" fill="#1e293b"/><rect x="9" y="12" width="1" height="1" fill="#1e293b"/><rect x="10" y="13" width="2" height="1" fill="#1e293b"/><rect x="12" y="12" width="1" height="1" fill="#1e293b"/><rect x="13" y="13" width="2" height="1" fill="#1e293b"/><rect x="1" y="7" width="1" height="3" fill="#e7e5e4"/><rect x="17" y="7" width="1" height="3" fill="#e7e5e4"/><rect x="3" y="16" width="13" height="1" fill="#e7e5e4"/><rect x="4" y="17" width="2" height="1" fill="#d6d3d1"/><rect x="8" y="17" width="3" height="1" fill="#d6d3d1"/><rect x="13" y="17" width="2" height="1" fill="#d6d3d1"/></svg>
+      <div><div class="item-title red">The Spreadsheet Monster</div><div class="sm xs" style="margin-top:4px">A sentient spreadsheet tearing itself apart with #REF! errors. Throws broken formulas. Defeat with Workflow Automator.</div><div class="mono xs" style="margin-top:6px;color:rgba(248,113,113,.5)">BOSS — LEVEL 3</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: POWER-UPS -->
+<div class="slide">
+  <div class="slide-number">04 / 10</div>
+  <div class="tag anim-fade">04 / PRODUCT INTEGRATION</div>
+  <h2 class="anim-fade">Power-Ups = BuildOps Features</h2>
+  <div class="grid2 stagger-children" style="margin-bottom:clamp(10px,1.8vh,16px)">
+    <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">⚡</span><div><div class="item-title yellow" style="font-size:clamp(12px,1.2vw,15px)">OpsAI Supercharge</div><div class="sm xs">2x all margins — the Star Power</div></div></div>
+    <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">📡</span><div><div class="item-title blue" style="font-size:clamp(12px,1.2vw,15px)">Smart Dispatch Radar</div><div class="sm xs">Reveals hidden bonuses on the map</div></div></div>
+    <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">💥</span><div><div class="item-title red" style="font-size:clamp(12px,1.2vw,15px)">Proposal Blaster</div><div class="sm xs">Rapid-fire invoices at lost revenue</div></div></div>
+    <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">🔮</span><div><div class="item-title purple" style="font-size:clamp(12px,1.2vw,15px)">Reporting Crystal Ball</div><div class="sm xs">See obstacles before they appear</div></div></div>
+    <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">🛡️</span><div><div class="item-title cyan" style="font-size:clamp(12px,1.2vw,15px)">Customer Portal Shield</div><div class="sm xs">Deflects bad review enemies</div></div></div>
+    <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">⚙️</span><div><div class="item-title orange" style="font-size:clamp(12px,1.2vw,15px)">Workflow Automator</div><div class="sm xs">Clears entire screen of enemies</div></div></div>
+  </div>
+  <div class="card anim-fade" style="animation-delay:.4s">
+    <div class="item-title" style="margin-bottom:8px">🎯 Boss Battles = Industry Pain Points</div>
+    <div><span class="boss-badge">The Spreadsheet Monster</span><span class="boss-badge">Manual Dispatch Chaos</span><span class="boss-badge">The Cash Flow Crunch</span><span class="boss-badge">Change Order Avalanche</span></div>
+  </div>
+</div>
+
+<!-- SLIDE 6: HIGH SCORE TABLE -->
+<div class="slide">
+  <div class="slide-number">05 / 10</div>
+  <div class="tag anim-fade">05 / THE HIGH SCORE TABLE</div>
+  <h2 class="anim-fade">Public Leaderboards Drive Viral Competition</h2>
+  <div class="flex-row anim-fade" style="animation-delay:.12s">
+    <div>
+      <div class="card card-green" style="height:100%">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(8px,1.2vh,14px)"><div class="green mono xs" style="letter-spacing:2px">🏢 TOP COMPANIES</div><div class="mono xs" style="color:rgba(255,255,255,.2)">WEEKLY</div></div>
+        <div class="lb stagger-children">
+          <div class="lb-row lb-gold"><span class="lb-rank">1</span><span class="lb-crown">👑</span><span class="lb-name">Orion Services Group</span><span class="lb-score">287,450</span><span class="lb-tier">LEGEND</span></div>
+          <div class="lb-row lb-silver"><span class="lb-rank">2</span><span class="lb-medal">🥈</span><span class="lb-name">Rolls Mechanical</span><span class="lb-score">256,310</span><span class="lb-tier">LEGEND</span></div>
+          <div class="lb-row lb-bronze"><span class="lb-rank">3</span><span class="lb-medal">🥉</span><span class="lb-name">Northwest Mechanical</span><span class="lb-score">198,100</span><span class="lb-tier">LEGEND</span></div>
+          <div class="lb-row"><span class="lb-rank">4</span><span class="lb-medal"></span><span class="lb-name">Rabine Group</span><span class="lb-score">176,300</span><span class="lb-tier">LEGEND</span></div>
+          <div class="lb-row"><span class="lb-rank">5</span><span class="lb-medal"></span><span class="lb-name">Certified Fire</span><span class="lb-score">162,940</span><span class="lb-tier">LEGEND</span></div>
+          <div class="lb-row"><span class="lb-rank">6</span><span class="lb-medal"></span><span class="lb-name">Classic Electric</span><span class="lb-score">148,200</span><span class="lb-tier">MASTER</span></div>
+          <div class="lb-row"><span class="lb-rank">7</span><span class="lb-medal"></span><span class="lb-name">Omnia Mechanical</span><span class="lb-score">134,750</span><span class="lb-tier">MASTER</span></div>
+          <div class="lb-row"><span class="lb-rank">8</span><span class="lb-medal"></span><span class="lb-name">Dormatech Mechanical</span><span class="lb-score">121,600</span><span class="lb-tier">MASTER</span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="height:100%">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(8px,1.2vh,14px)"><div class="yellow mono xs" style="letter-spacing:2px">🧑‍🔧 TOP TECHS</div><div class="mono xs" style="color:rgba(255,255,255,.2)">ALL-TIME</div></div>
+        <div class="lb stagger-children">
+          <div class="lb-row lb-gold"><span class="lb-rank">1</span><span class="lb-crown">👑</span><span class="lb-name">M. Rivera <span class="lb-co">Orion</span></span><span class="lb-score">94,200</span><span class="lb-char">⚡</span></div>
+          <div class="lb-row lb-silver"><span class="lb-rank">2</span><span class="lb-medal">🥈</span><span class="lb-name">K. Rolls <span class="lb-co">Rolls Mech</span></span><span class="lb-score">91,880</span><span class="lb-char">🔧</span></div>
+          <div class="lb-row lb-bronze"><span class="lb-rank">3</span><span class="lb-medal">🥉</span><span class="lb-name">J. Kowalski <span class="lb-co">NW Mech</span></span><span class="lb-score">82,100</span><span class="lb-char">🔧</span></div>
+          <div class="lb-row"><span class="lb-rank">4</span><span class="lb-medal"></span><span class="lb-name">R. Chen <span class="lb-co">Holmes</span></span><span class="lb-score">76,800</span><span class="lb-char">⚡</span></div>
+          <div class="lb-row"><span class="lb-rank">5</span><span class="lb-medal"></span><span class="lb-name">T. Jackson <span class="lb-co">Jackson Mech</span></span><span class="lb-score">71,350</span><span class="lb-char">🔧</span></div>
+          <div class="lb-row"><span class="lb-rank">6</span><span class="lb-medal"></span><span class="lb-name">A. Hubbard <span class="lb-co">Hubbard Mech</span></span><span class="lb-score">68,900</span><span class="lb-char">🛡️</span></div>
+          <div class="lb-row"><span class="lb-rank">7</span><span class="lb-medal"></span><span class="lb-name">K. Nguyen <span class="lb-co">Classic Elec</span></span><span class="lb-score">63,200</span><span class="lb-char">⚡</span></div>
+          <div class="lb-row"><span class="lb-rank">8</span><span class="lb-medal"></span><span class="lb-name">B. Minter <span class="lb-co">JL Minter</span></span><span class="lb-score">58,750</span><span class="lb-char">🔧</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid3 stagger-children" style="margin-top:clamp(8px,1.2vh,14px)">
+    <div class="card" style="text-align:center;padding:clamp(10px,1.2vw,16px)"><div style="font-size:clamp(16px,2vw,24px)">📱</div><div class="item-title" style="font-size:clamp(10px,1vw,13px);margin-top:4px">Share Score Card</div><div class="sm xs" style="margin-top:2px">1-tap share to LinkedIn, X, and text with retro pixel score card</div></div>
+    <div class="card" style="text-align:center;padding:clamp(10px,1.2vw,16px)"><div style="font-size:clamp(16px,2vw,24px)">⚔️</div><div class="item-title" style="font-size:clamp(10px,1vw,13px);margin-top:4px">Challenge a Rival</div><div class="sm xs" style="margin-top:2px">Send a direct challenge link — "Think you can beat my margin?"</div></div>
+    <div class="card" style="text-align:center;padding:clamp(10px,1.2vw,16px)"><div style="font-size:clamp(16px,2vw,24px)">🏟️</div><div class="item-title" style="font-size:clamp(10px,1vw,13px);margin-top:4px">Forge 2026 Finals</div><div class="sm xs" style="margin-top:2px">Top 10 compete live on stage. Winner crowned at keynote.</div></div>
+  </div>
+</div>
+
+<!-- SLIDE 7: VIRAL ENGINE -->
+<div class="slide">
+  <div class="slide-number">06 / 10</div>
+  <div class="tag anim-fade">06 / VIRAL ENGINE</div>
+  <h2 class="anim-fade">Tiers & Ongoing Engagement</h2>
+  <div class="flex-row anim-fade" style="animation-delay:.15s">
+    <div>
+      <div class="card">
+        <div class="item-title" style="margin-bottom:clamp(10px,1.4vh,16px)">Leaderboard Tiers</div>
+        <div style="margin-bottom:clamp(10px,1.4vh,14px)"><div class="tier"><span class="tier-name">🔧 Apprentice</span><span class="tier-pts">0 – 10K</span></div><div class="bar-wrap"><div class="bar-fill w25" style="background:linear-gradient(90deg,#6b7280,#9ca3af)"></div></div></div>
+        <div style="margin-bottom:clamp(10px,1.4vh,14px)"><div class="tier"><span class="tier-name">⚡ Journeyman</span><span class="tier-pts">10K – 50K</span></div><div class="bar-wrap"><div class="bar-fill w50" style="background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div></div>
+        <div style="margin-bottom:clamp(10px,1.4vh,14px)"><div class="tier"><span class="tier-name">🔥 Master Contractor</span><span class="tier-pts">50K – 150K</span></div><div class="bar-wrap"><div class="bar-fill w75" style="background:linear-gradient(90deg,#ea580c,#fb923c)"></div></div></div>
+        <div><div class="tier"><span class="tier-name">👑 Service + Projects Legend</span><span class="tier-pts">150K+</span></div><div class="bar-wrap"><div class="bar-fill w100" style="background:linear-gradient(90deg,#ca8a04,#facc15)"></div></div></div>
+      </div>
+    </div>
+    <div class="stagger-children" style="display:flex;flex-direction:column;gap:clamp(10px,1.4vh,16px)">
+      <div class="card"><div class="item-title" style="font-size:clamp(12px,1.1vw,14px);margin-bottom:5px">📱 Social Sharing</div><div class="sm xs">Shareable retro pixel score cards for LinkedIn, X, and Instagram. "Challenge a competitor" direct links.</div></div>
+      <div class="card"><div class="item-title" style="font-size:clamp(12px,1.1vw,14px);margin-bottom:5px">🏟️ Forge 2026 Tie-In</div><div class="sm xs">Live arcade tournament at the conference. Top leaderboard players recognized on stage at keynote.</div></div>
+      <div class="card"><div class="item-title" style="font-size:clamp(12px,1.1vw,14px);margin-bottom:5px">🔄 Ongoing Engagement</div><div class="sm xs">Weekly challenges, seasonal content drops, monthly prizes for top players (swag, Forge tickets, credits).</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: SCORING -->
+<div class="slide">
+  <div class="slide-number">07 / 10</div>
+  <div class="tag anim-fade">07 / SCORING SYSTEM</div>
+  <h2 class="anim-fade">Business Metrics = Game Score</h2>
+  <div class="grid3 stagger-children" style="margin-bottom:clamp(10px,1.8vh,18px)">
+    <div class="card metric-card"><div class="icon">💰</div><div class="name green">Profit Margin %</div><div class="role">Primary Score Driver</div></div>
+    <div class="card metric-card"><div class="icon">🎯</div><div class="name blue">First-Time Fix Rate</div><div class="role">Bonus Multipliers</div></div>
+    <div class="card metric-card"><div class="icon">❤️</div><div class="name red">Tech Utilization</div><div class="role">Health Bar</div></div>
+    <div class="card metric-card"><div class="icon">🔓</div><div class="name yellow">Revenue Per Tech</div><div class="role">Level Unlocks</div></div>
+    <div class="card metric-card"><div class="icon">🛡️</div><div class="name cyan">Customer Satisfaction</div><div class="role">Shield / Defense</div></div>
+    <div class="card metric-card"><div class="icon">💎</div><div class="name purple">Cash Flow</div><div class="role">In-Game Currency</div></div>
+  </div>
+  <div class="card card-green anim-fade" style="animation-delay:.4s">
+    <div class="item-title" style="margin-bottom:8px">Score Multiplier Stack</div>
+    <div class="score-flow"><span class="badge">Base Job Points</span><span class="green">×</span><span class="badge">Metric Multiplier</span><span class="green">+</span><span class="badge">Power-Up Bonus</span><span class="green">+</span><span class="badge">Time Bonus</span><span class="green">+</span><span class="badge">Streak Bonus</span></div>
+  </div>
+</div>
+
+<!-- SLIDE 9: TECHNICAL -->
+<div class="slide">
+  <div class="slide-number">08 / 10</div>
+  <div class="tag anim-fade">08 / TECHNICAL APPROACH</div>
+  <h2 class="anim-fade">Fast Build with Claude Code</h2>
+  <div class="flex-row anim-fade" style="animation-delay:.15s">
+    <div><div class="card card-green" style="height:100%"><div class="green mono xs" style="margin-bottom:10px">WHY THIS IS FAST & CHEAP</div><div class="sm" style="line-height:2.4"><span class="bullet">▸</span> Browser-based HTML5 / Phaser.js — no app store needed<br><span class="bullet">▸</span> Claude Code scaffolds game engine, levels, and scoring<br><span class="bullet">▸</span> Retro pixel art is intentionally lo-fi — fast to produce<br><span class="bullet">▸</span> Static hosting + simple leaderboard API — minimal infra<br><span class="bullet">▸</span> Instant distribution via URL (play.buildops.com)</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:clamp(10px,1.4vh,16px)">
+      <div class="card"><div class="yellow mono xs" style="margin-bottom:10px">MVP — PHASE 1</div><div class="sm" style="line-height:2.2">✅ 5 playable levels<br>✅ 6 power-ups mapped to features<br>✅ Global leaderboard + social sharing<br>✅ Mobile-responsive browser play<br>✅ Basic analytics dashboard</div></div>
+      <div class="card"><div class="purple mono xs" style="margin-bottom:10px">PHASE 2+</div><div class="sm" style="line-height:2.2;color:rgba(255,255,255,.35)">Multiplayer co-op mode<br>Custom avatar builder<br>Real account data integration<br>Retro arcade cabinet at Forge</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: METRICS -->
+<div class="slide">
+  <div class="slide-number">09 / 10</div>
+  <div class="tag anim-fade">09 / SUCCESS METRICS</div>
+  <h2 class="anim-fade">How We Measure the Win</h2>
+  <div class="grid2 stagger-children" style="margin-bottom:clamp(10px,1.8vh,18px)">
+    <div class="card" style="display:flex;align-items:flex-start;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">👥</span><div><div class="item-title">Unique Players</div><div class="sm xs" style="margin-top:4px">Total reach across customers & prospects</div></div></div>
+    <div class="card" style="display:flex;align-items:flex-start;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">🔁</span><div><div class="item-title">Repeat Play Rate</div><div class="sm xs" style="margin-top:4px">Sessions per user — stickiness signal</div></div></div>
+    <div class="card" style="display:flex;align-items:flex-start;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">📣</span><div><div class="item-title">Social Shares</div><div class="sm xs" style="margin-top:4px">Organic reach from score card sharing</div></div></div>
+    <div class="card" style="display:flex;align-items:flex-start;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">📊</span><div><div class="item-title">Pipeline Influence</div><div class="sm xs" style="margin-top:4px">Prospects who played → demo requests</div></div></div>
+    <div class="card" style="display:flex;align-items:flex-start;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">❤️</span><div><div class="item-title">Brand Sentiment</div><div class="sm xs" style="margin-top:4px">Lift in customer survey scores</div></div></div>
+    <div class="card" style="display:flex;align-items:flex-start;gap:14px"><span style="font-size:clamp(20px,2.2vw,28px)">🏟️</span><div><div class="item-title">Forge Engagement</div><div class="sm xs" style="margin-top:4px">Conference participation & buzz</div></div></div>
+  </div>
+  <div class="card card-yellow anim-fade" style="text-align:center;animation-delay:.4s"><div class="yellow" style="font-weight:700">The Ultimate KPI</div><div class="sm xs" style="margin-top:5px">Do contractors share their scores and challenge each other unprompted?</div></div>
+</div>
+
+<!-- SLIDE 11: NEXT STEPS -->
+<div class="slide center">
+  <div class="slide-number">10 / 10</div>
+  <div class="tag anim-fade">10 / NEXT STEPS</div>
+  <h2 class="anim-fade">Ready to Press Start?</h2>
+  <div class="stagger-children" style="text-align:left;max-width:580px;width:100%">
+    <div class="item"><div class="step-num">1</div><div class="sm" style="color:rgba(255,255,255,.7)">Align on game style (adventure vs. mini-games) and final name</div></div>
+    <div class="item"><div class="step-num">2</div><div class="sm" style="color:rgba(255,255,255,.7)">Finalize feature-to-power-up mapping with product team</div></div>
+    <div class="item"><div class="step-num">3</div><div class="sm" style="color:rgba(255,255,255,.7)">Scope Claude Code sprint for MVP build (est. 2–4 weeks)</div></div>
+    <div class="item"><div class="step-num">4</div><div class="sm" style="color:rgba(255,255,255,.7)">Commission pixel art assets and chiptune audio</div></div>
+    <div class="item"><div class="step-num">5</div><div class="sm" style="color:rgba(255,255,255,.7)">Soft launch to select customers → iterate → full launch</div></div>
+    <div class="item"><div class="step-num">6</div><div class="sm" style="color:rgba(255,255,255,.7)">Tie leaderboard into Forge 2026 programming</div></div>
+  </div>
+  <a href="https://buildops.com" target="_blank" rel="noopener" class="green mono pulse glow-text anim-fade" style="margin-top:4vh;font-size:clamp(13px,1.5vw,18px);animation-delay:.5s;text-decoration:none;transition:all .3s">CONTINUE? ▶</a>
+</div>
+
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" disabled>◀ PREV</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn">NEXT ▶</button>
+</div>
+
+<script>
+(function(){
+  var c=document.getElementById('particles');
+  for(var i=0;i<25;i++){var p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(12+Math.random()*18)+'s';p.style.animationDelay=Math.random()*15+'s';p.style.width=p.style.height=(1+Math.random()*2)+'px';c.appendChild(p)}
+})();
+
+var cur=0;
+var slides=document.querySelectorAll('.slide');
+var total=slides.length;
+var dotsEl=document.getElementById('dots');
+var prevBtn=document.getElementById('prevBtn');
+var nextBtn=document.getElementById('nextBtn');
+
+for(var i=0;i<total;i++){
+  var d=document.createElement('button');
+  d.className='dot'+(i===0?' active':'');
+  (function(idx){d.onclick=function(){goTo(idx)}})(i);
+  dotsEl.appendChild(d);
+}
+
+prevBtn.onclick=function(){go(-1)};
+nextBtn.onclick=function(){go(1)};
+
+function resetAnims(sl){
+  var els=sl.querySelectorAll('.anim-fade,.stagger-children > *');
+  for(var i=0;i<els.length;i++){els[i].style.animation='none';els[i].offsetHeight;els[i].style.animation=''}
+  var bars=sl.querySelectorAll('.bar-fill');
+  for(var i=0;i<bars.length;i++){var b=bars[i];b.style.width='0';(function(el){setTimeout(function(){el.style.width=''},50)})(b)}
+}
+
+function checkScroll(sl){
+  sl.classList.remove('scrollable');
+  sl.style.overflow='hidden';
+  var viewH = window.innerHeight || document.documentElement.clientHeight;
+  if(sl.scrollHeight > viewH){
+    sl.classList.add('scrollable');
+    sl.style.overflow='';
+  }
+}
+
+function goTo(n){
+  slides[cur].classList.remove('active');
+  slides[cur].classList.remove('scrollable');
+  dotsEl.children[cur].classList.remove('active');
+  cur=n;
+  resetAnims(slides[cur]);
+  slides[cur].classList.add('active');
+  dotsEl.children[cur].classList.add('active');
+  prevBtn.disabled=cur===0;
+  nextBtn.disabled=cur===total-1;
+  setTimeout(function(){checkScroll(slides[cur])},100);
+  slides[cur].scrollTop=0;
+}
+
+function go(dir){goTo(Math.max(0,Math.min(total-1,cur+dir)))}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(1)}
+  if(e.key==='ArrowLeft'){e.preventDefault();go(-1)}
+});
+
+var tx=0;
+document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX});
+document.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50){dx<0?go(1):go(-1)}});
+
+setTimeout(function(){checkScroll(slides[0])},200);
+window.addEventListener('resize',function(){checkScroll(slides[cur])});
+</script>
+</body>
+</html>
